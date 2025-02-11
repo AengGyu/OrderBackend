@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class LoginController {
 
+    //깃허브 확인용
     private final MemberService memberService;
 
     @PostMapping("/login")
