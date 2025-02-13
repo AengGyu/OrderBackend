@@ -15,6 +15,7 @@ import com.aengpyo.orderservice.service.product.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/orders")
@@ -71,14 +73,21 @@ public class OrderController {
         Product product = productService.findProductById(orderRequest.getProductId())
                 .orElseThrow(() -> new CommonException("존재하지 않는 상품입니다.", HttpStatus.BAD_REQUEST));
 
+        if (product.getQuantity() < orderRequest.getQuantity()) {
+            throw new CommonException("현재 상품 개수가 부족합니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        product.setQuantity(product.getQuantity() - orderRequest.getQuantity());
+        Product updatedProduct = productService.updateProduct(product);
+
         HttpSession session = request.getSession(false);
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_SESSION);
 
-        int discount = discountPolicy.discount(member.getGrade(), product.getPrice() * orderRequest.getQuantity());
+        int discount = discountPolicy.discount(member.getGrade(), updatedProduct.getPrice() * orderRequest.getQuantity());
 
         Order order = new Order(member.getId(), member.getName(), member.getGrade(),
-                product.getId(), product.getName(), product.getPrice(), orderRequest.getQuantity(),
-                product.getPrice() * orderRequest.getQuantity() - discount);
+                updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getPrice(), orderRequest.getQuantity(),
+                updatedProduct.getPrice() * orderRequest.getQuantity() - discount);
 
         Order ordered = orderService.order(order);
 

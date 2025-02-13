@@ -35,4 +35,13 @@ public class MemoryProductRepository implements ProductRepository{
     public List<Product> findAll() {
         return new ArrayList<>(store.values());
     }
+
+    @Override
+    public Product update(Product product) {
+        if (store.containsKey(product.getId())) {
+            store.put(product.getId(), product);
+        }
+
+        return product;
+    }
 }

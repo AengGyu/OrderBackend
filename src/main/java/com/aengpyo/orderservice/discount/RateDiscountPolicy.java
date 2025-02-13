@@ -1,7 +1,9 @@
 package com.aengpyo.orderservice.discount;
 
 import com.aengpyo.orderservice.domain.Grade;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RateDiscountPolicy implements DiscountPolicy {
 
     @Override

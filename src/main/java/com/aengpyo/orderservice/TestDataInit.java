@@ -26,7 +26,7 @@ public class TestDataInit {
         test.setLoginId("test");
         test.setPassword("test!");
         test.setName("test");
-        test.setGrade(Grade.BRONZE);
+        test.setGrade(Grade.SILVER);
         memberRepository.save(test);
     }
 }

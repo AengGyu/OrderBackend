@@ -3,7 +3,7 @@ package com.aengpyo.orderservice.discount;
 import com.aengpyo.orderservice.domain.Grade;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class FixedDiscountPolicy implements DiscountPolicy {
 
     @Override
