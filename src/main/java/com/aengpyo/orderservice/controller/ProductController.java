@@ -38,14 +38,7 @@ public class ProductController {
         }
 
         HttpSession session = request.getSession(false);
-        if (session == null) {
-            throw new CommonException("세션이 만료되었습니다. 다시 로그인해주세요.", HttpStatus.UNAUTHORIZED);
-        }
-
         Member member = (Member) session.getAttribute(SessionConst.LOGIN_SESSION);
-        if (member == null) {
-            throw new CommonException("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
-        }
 
         if (member.getGrade() != Grade.ADMIN) {
             throw new CommonException("접근 권한이 없습니다.", HttpStatus.FORBIDDEN);
