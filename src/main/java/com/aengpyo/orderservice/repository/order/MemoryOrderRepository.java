@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-@Repository
+//@Repository
 public class MemoryOrderRepository implements OrderRepository{
 
     private static final Map<Long, Order> store = new HashMap<>();
